@@ -4,5 +4,6 @@ import uc from '../controllers/usuarios.controller.js'
 const router = express.Router()
 
 router.get("/", uc.listar)
+router.get("/:id", uc.filtrarId)
 
 export default router
