@@ -1,4 +1,6 @@
-let usuarios = [
+
+
+ let usuarios = [
   {
     id: 1,
     "nome": "João Silva",
@@ -36,11 +38,27 @@ let usuarios = [
   }
 ]
 
+class Usuarios {
+  constructor(nome, teleone, email, idade) {
+    this.id = 6 + 1
+    this.nome = nome
+    this.telefone = teleone
+    this.email = email
+    this.idade = idade
+  }
+   criarUsuario(nome, teleone, email, idade) {
+    const usuario1 = new Usuarios(nome, teleone, email, idade)
+    usuarios.push(usuario1)
+  }
+}
+
 const listar = (req, res) => {res.json(usuarios)}
 const filtrarId = (req, res) => {
   const id = parseInt(req.params.id)
   const usuario = usuarios.find(t => t.id === id)
   res.json(usuario)
 }
+
+criarUsuario("Tomas", "27992345683", "tomas.google@gmail.com", 28)
 
 export default { listar, filtrarId }
