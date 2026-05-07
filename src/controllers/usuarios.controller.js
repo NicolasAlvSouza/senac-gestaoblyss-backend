@@ -53,11 +53,13 @@ const filtrarId = (req, res) => {
   res.json(usuario)
 }
 
-const criarUsuario = (req, res) => {
+const criar = (req, res) => {
   const {nome, telefone, email, idade, senha} = req.body
 
-  if(!nome) {
-    return res.status(400).json({ erro: "Titulo obrigatorio" })
+  if (!nome || !email || !telefone || !senha) {
+    return res.status(400).json({
+      erro: 'nome, email, telefone e senha são obrigatórios'
+    });
   }
   const novoUsuario = {
     id: usuarios[usuarios.length-1].id + 1,
@@ -72,4 +74,39 @@ const criarUsuario = (req, res) => {
   res.status(201).json(novoUsuario) // 201 Criado
 }
 
-export default { listar, filtrarId, criarUsuario }
+function atualizar(req, res) {
+  const id = Number(req.params.id);
+  const indice = usuarios.findIndex(u => u.id === id);
+
+  if (indice === -1) {
+    return res.status(404).json({ erro: 'Usuário não encontrado' });
+  }
+
+  const { nome, email, telefone, senha } = req.body;
+
+  // spread + short-circuit: só sobrescreve campos enviados no body
+  usuarios[indice] = {
+    ...usuarios[indice],
+    ...(nome && { nome }),
+    ...(email && { email }),
+    ...(telefone && { telefone }),
+    ...(senha && { senha })
+  };
+
+  res.json(usuarios[indice]);
+}
+
+export function remover(req, res) {
+  const id = Number(req.params.id);
+  const indice = usuarios.findIndex(u => u.id === id);
+
+  if (indice === -1) {
+    return res.status(404).json({ erro: 'Usuário não encontrado' });
+  }
+
+  // splice retorna um array com os itens removidos; desestruturamos o primeiro
+  const [removido] = usuarios.splice(indice, 1);
+  res.json({ mensagem: 'Usuário removido', usuario: removido });
+}
+
+export default { listar, filtrarId, criar, atualizar, remover }

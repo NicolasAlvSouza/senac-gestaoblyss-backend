@@ -5,6 +5,8 @@ const router = express.Router()
 
 router.get("/", uc.listar)
 router.get("/:id", uc.filtrarId)
-router.post("/", uc.criarUsuario)
+router.post("/", uc.criar)
+router.put('/:id', uc.atualizar);
+router.delete('/:id', uc.remover)
 
 export default router
